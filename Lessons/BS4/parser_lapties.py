@@ -1,4 +1,4 @@
-import re
+﻿import re
 import json
 from datetime import datetime
 
@@ -55,5 +55,5 @@ if __name__ == '__main__':
     # result = main(get_urls())
     # print(*result, sep = "\n")
     print(result := main(get_urls()))
-    with open('dead_larties.json', 'w', encoding='utf-8') as fd:
+    with open('dead_lapties.json', 'w', encoding='utf-8') as fd:
         json.dump(result, fd, ensure_ascii=False, indent=4)
