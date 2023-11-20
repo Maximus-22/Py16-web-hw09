@@ -1,7 +1,7 @@
 import json
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+# from datetime import datetime
 
 
 BASE_URL = "http://quotes.toscrape.com"
@@ -13,8 +13,9 @@ DATA_AUTHORS = "authors.json"
 
 def get_page_content(url):
     response = requests.get(url)
-    content = BeautifulSoup(response.content, 'html.parser')
-    return content
+    if response.status_code == 200:
+        content = BeautifulSoup(response.content, 'html.parser')
+        return content
 
 
 def get_quotes(content):
@@ -34,19 +35,16 @@ def get_authors(content):
     authors = content.find_all('div', class_='quote')
     for author in authors:
         author_link = author.find('a')['href']
-        author_url = BASE_URL + author_link  
-        response = requests.get(author_url)
-        if response.status_code == 200:
-            # Отримуємо HTML-контент сторінки автора
-            author_page_content = response.text
-            author_soup = BeautifulSoup(author_page_content, 'html.parser')
-            fullname = author_soup.find('h3', class_='author-title').get_text(strip = True)
-            born_date = author_soup.find('span', class_='author-born-date').get_text()
-            # born_date_object = datetime.strptime(born_date, '%B %d, %Y')
-            born_location = author_soup.find('span', class_='author-born-location').get_text(strip = True)
-            description = author_soup.find("div", class_='author-description').get_text(strip = True)
-            authors_data.append({"fullname" : fullname, "born_date" : born_date,
-                                 "born_location" : born_location, "description" : description})
+        author_url = BASE_URL + author_link
+        # Отримуємо HTML-контент сторінки автора  
+        author_response = get_page_content(author_url)
+        fullname = author_response.find('h3', class_='author-title').get_text(strip = True)
+        born_date = author_response.find('span', class_='author-born-date').get_text()
+        # born_date_object = datetime.strptime(born_date, '%B %d, %Y')
+        born_location = author_response.find('span', class_='author-born-location').get_text(strip = True)
+        description = author_response.find("div", class_='author-description').get_text(strip = True)
+        authors_data.append({"fullname" : fullname, "born_date" : born_date,
+                             "born_location" : born_location, "description" : description})
     return authors_data
 
 

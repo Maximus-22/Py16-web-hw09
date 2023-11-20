@@ -22,7 +22,8 @@ class AuthorItem(Item):
 class DataPipline:
     quotes = []
     authors = []
-
+    
+    # Назва функції не зi стелi, це <owerwrite> iснуючої функції у даному класi
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
         if 'fullname' in adapter.keys():
@@ -30,11 +31,12 @@ class DataPipline:
         if 'quote' in adapter.keys():
             self.quotes.append(dict(adapter))
 
-    # def close_spider(self, spider):
-    #     with open('quotes.json', 'w', encoding='utf-8') as fd:
-    #         json.dump(self.quotes, fd, ensure_ascii=False, indent=2)
-    #     with open('authors.json', 'w', encoding='utf-8') as fd:
-    #         json.dump(self.authors, fd, ensure_ascii=False, indent=2)
+    # Назва функції не зi стелi, це <owerwrite> iснуючої функції у даному класi
+    def close_spider(self, spider):
+        with open('quotes.json', 'w', encoding='utf-8') as fd:
+            json.dump(self.quotes, fd, ensure_ascii=False, indent=2)
+        with open('authors.json', 'w', encoding='utf-8') as fd:
+            json.dump(self.authors, fd, ensure_ascii=False, indent=2)
 
 
 class QuotesSpider(scrapy.Spider):
